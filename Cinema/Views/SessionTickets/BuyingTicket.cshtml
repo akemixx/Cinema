@@ -1,0 +1,34 @@
+﻿@model SessionTickets
+@{
+    ViewData["Title"] = "BuyingTicket";
+}
+
+<h1>Choosed tickets:</h1>
+@if (Model.BookedSeats.Count == 0)
+{
+    <p>You should choose at least one seat</p>
+    <a href='@Url.Action("Index", "SessionTickets", new { IdSession = Model.Session.Id })'>Move back</a>
+}
+else
+{
+    <form id="form" method="post" asp-action="ChooseFormAction" asp-all-route-data="@{ new Dictionary<string, string> { { "IdSession", Model.Session.Id.ToString() } } }">
+        @{
+            for (int i = 0; i < Model.BookedSeats.Count; i++)
+            {
+        <div class="ticket">
+            <p><b>Title:</b> @Model.Session.IdFilmNavigation.Title</p>
+            <p><b>Date:</b> @Model.Session.Date.ToShortDateString()</p>
+            <p><b>Time:</b> @Model.Session.Time.ToString(@"hh\:mm")</p>
+            <p><b>Hall:</b> @Model.Session.IdHallNavigation.Title</p>
+            <p><b>Seat:</b> @Model.BookedSeats[i].IdSeat</p>
+            <p><b>Price:</b> @Model.Session.Price</p>
+            <input type="hidden" name="BookedSeats[@i]" value="@Model.BookedSeats[i].IdSeat" />
+            <input type="submit" class="button" id="deleteButton" name="@i" value="Delete" />
+        </div>
+            }
+        }
+        <br />
+        <input type="submit" class="button" name="BuyTickets" value="Buy tickets" />
+        <input type="submit" class="button" name="BookTickets" value="Book tickets" />
+    </form>
+}
