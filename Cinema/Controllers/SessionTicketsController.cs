@@ -43,40 +43,23 @@ namespace Cinema.Controllers
         [HttpPost]
         public IActionResult ChooseFormAction(int IdSession, List<int> BookedSeats)
         {
-            if(Request.Form.FirstOrDefault(x => x.Value == "Delete").Key != null) // delete ticket
-            {
-                var DeleteSeatNum = Convert.ToInt32(Request.Form.FirstOrDefault(x => x.Value == "Delete").Key);
-                BookedSeats.RemoveAt(DeleteSeatNum);
-                return SelectSeats(IdSession, BookedSeats);
-            }
             if(Request.Form.FirstOrDefault(x => x.Key == "BuyTickets").Key != null) // buy tickets
             {
-                return BuyTickets(IdSession, BookedSeats, "BUSY");
+                return ProcessTickets(IdSession, BookedSeats, "BUSY");
             }
-            if (Request.Form.FirstOrDefault(x => x.Key == "BookTickets").Key != null) // book tickets
-            {
-                return BuyTickets(IdSession, BookedSeats, "BOOKED");
-            }
-            return SelectSeats(IdSession, BookedSeats);
+            // book tickets
+            return ProcessTickets(IdSession, BookedSeats, "BOOKED");
         }
-        //public IActionResult DeleteSelectedSeat(int IdSession, List<int> BookedSeats)
-        //{
-        //    var DeleteSeatNum = Convert.ToInt32(Request.Form.FirstOrDefault(x => x.Value == "Delete").Key);
-        //    BookedSeats.RemoveAt(DeleteSeatNum);
-
-        //}
 
         //[HttpPost]
-        public IActionResult BuyTickets(int IdSession, List<int> BookedSeats, string NewStatus)
+        public IActionResult ProcessTickets(int IdSession, List<int> BookedSeats, string NewStatus)
         {
-            //List<Ticket> BookedTickets = new List<Ticket>();
             foreach (int IdSeat in BookedSeats)
             {
                 var ChangedTicket = _context.Ticket.Where(item => item.IdSession == IdSession && item.IdSeat == IdSeat)
                                                .FirstOrDefault();
                 _context.Ticket.Attach(ChangedTicket); // State = Unchanged
                 ChangedTicket.Status = NewStatus; // State = Modified, and only the Status property is dirty.
-                //BookedTickets.Add(ChangedTicket);
             }
             _context.SaveChanges();
             //SessionTickets model = new SessionTickets(IdSession, BookedTickets, _context);

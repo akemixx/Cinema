@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cinema;
 using Cinema.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Cinema.Controllers
 {
@@ -22,8 +23,8 @@ namespace Cinema.Controllers
         // GET: FilmsSessions
         public async Task<IActionResult> Index()
         {
-            var model = GetFilmsSessions(DateTime.Now);
-            return View(model);
+           var model = GetFilmsSessions(DateTime.Now);
+           return View(model);
         }
 
         [HttpPost]
@@ -49,11 +50,33 @@ namespace Cinema.Controllers
             var films = new List<Film>();
             foreach (var el in list)
             {
-                el.f.Session = el.Session.ToList();
+                el.f.Session = el.Session.OrderBy(s => s.Time).ToList();
                 films.Add(el.f);
             }
             model.Films = films;
             return model;
+        }
+
+        public IActionResult FilterByDateAjax([FromBody] DateTime FilterDate)
+        {
+            if (ModelState.IsValid)
+            {
+                var appDbContext = _context.Film.Where(s => s.Session.Any(i => i.Date.Equals(FilterDate)))
+                                            .Select(f => new
+                                            {
+                                                f,
+                                                Session = f.Session.Where(e => e.Date.Equals(FilterDate))
+                                            });
+                var list = appDbContext.ToList();
+                var films = new List<Film>();
+                foreach (var el in list)
+                {
+                    el.f.Session = el.Session.OrderBy(s => s.Time).ToList();
+                    films.Add(el.f);
+                }
+                return new JsonResult(new { films = Json(films) });
+            }
+            return BadRequest(ModelState["FilterDate"].Errors[0].ErrorMessage);
         }
     }
 }
