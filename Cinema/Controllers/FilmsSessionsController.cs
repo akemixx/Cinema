@@ -21,19 +21,20 @@ namespace Cinema.Controllers
         }
 
         // GET: FilmsSessions
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
            var model = GetFilmsSessions(DateTime.Now);
            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> FilterByDate(DateTime FilterDate)
+        public IActionResult FilterByDate(DateTime FilterDate)
         {
             var model = GetFilmsSessions(FilterDate);
             return View("Index", model);
         }
 
+        // get from db sessions on concrete date
         private FilmsSessions GetFilmsSessions(DateTime date)
         {
             var model = new FilmsSessions
@@ -57,6 +58,7 @@ namespace Cinema.Controllers
             return model;
         }
 
+        // get ajax request for filtering sessions by date
         public IActionResult FilterByDateAjax([FromBody] DateTime FilterDate)
         {
             if (ModelState.IsValid)

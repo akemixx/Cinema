@@ -71,7 +71,6 @@ C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Sessions\Delete.cshtml.g.cs
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Sessions\Details.cshtml.g.cs
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Sessions\Edit.cshtml.g.cs
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Sessions\Index.cshtml.g.cs
-C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\SessionTickets\BuyingTicket.cshtml.g.cs
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\SessionTickets\SessionTickets.cshtml.g.cs
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_CookieConsentPartial.cshtml.g.cs
@@ -80,3 +79,10 @@ C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_ValidationScriptsPa
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\_ViewStart.cshtml.g.cs
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Cinema.genruntimeconfig.cache
+C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Halls\Create.cshtml.g.cs
+C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Halls\Delete.cshtml.g.cs
+C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Halls\Details.cshtml.g.cs
+C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Halls\Edit.cshtml.g.cs
+C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\Halls\Index.cshtml.g.cs
+C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\SessionTickets\Succeeded.cshtml.g.cs
+C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\SessionTickets\TicketCart.cshtml.g.cs

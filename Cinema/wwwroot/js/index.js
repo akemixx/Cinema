@@ -1,12 +1,11 @@
 ﻿document.getElementById("FilterButton").addEventListener("click", function () {
     FilterByDate(document.getElementById("FilterDate").value);
-});
+}); // button click for filtering sessions by date
 
-async function FilterByDate(FilterDate) {
+// ajax request for filtering sessions
+async function FilterByDate(FilterDate) { 
     let xsrf_token = document.getElementsByName("__RequestVerificationToken")[0].value;
     const url = '/FilmsSessions/FilterByDateAjax';
-    //let formData = new FormData();
-    //formData.append("FilterDate", date); 
 
     try {
         const response = await fetch(url, {
@@ -31,6 +30,7 @@ async function FilterByDate(FilterDate) {
     }
 }
 
+// show found films sessions on page
 function ShowFilteredFilmsSessions(date, films) {
     document.getElementById("FilterDate").value = date;
     var html = "";

@@ -9,11 +9,11 @@ namespace Cinema.Models
     public class SessionTickets
     {
         public virtual Session Session { get; set; }
-        public virtual List<Ticket> BookedSeats { get; set; }
+        public virtual List<Ticket> SelectedTickets { get; set; }
 
         public SessionTickets()
         {
-            BookedSeats = new List<Ticket>();
+            SelectedTickets = new List<Ticket>();
         }
 
         public SessionTickets(int IdSession, AppDbContext _context) 
@@ -27,10 +27,10 @@ namespace Cinema.Models
             Session.Ticket = Session.Ticket.OrderBy(ticket => ticket.IdSeat).ToList();
         }
 
-        public SessionTickets(int IdSession, List<Ticket> BookedSeats, AppDbContext _context) 
+        public SessionTickets(int IdSession, List<Ticket> SelectedTickets, AppDbContext _context) 
             : this(IdSession, _context)
         {
-            this.BookedSeats = BookedSeats;
+            this.SelectedTickets = SelectedTickets;
         }
     }
 }
