@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "kVo8lXu4qmaak9aqEtz1QzZKlRzahF5G0m1duiypCzKGlvOPNffd9pl02NobGKRuZeSP5pSr1+Rw6Yl832Fvbw==",
+  "dgSpecHash": "sHaTGNcVx1m9y7owaz0+JTyqAnCfUUGa3iv/wJ5lKh3DbsuqDKWgLnz9d5LrF/dh2WCEMEWXDWtPXsypoYwHmg==",
   "success": true,
   "projectFilePath": "C:\\Cinema\\CinemaA\\CinemaA.csproj",
   "expectedPackageFiles": [
@@ -11,6 +11,8 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Валерия\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\3.1.6\\microsoft.aspnetcore.identity.entityframeworkcore.3.1.6.nupkg.sha512",
     "C:\\Users\\Валерия\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\3.1.6\\microsoft.aspnetcore.identity.ui.3.1.6.nupkg.sha512",
+    "C:\\Users\\Валерия\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\3.1.8\\microsoft.aspnetcore.jsonpatch.3.1.8.nupkg.sha512",
+    "C:\\Users\\Валерия\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\3.1.8\\microsoft.aspnetcore.mvc.newtonsoftjson.3.1.8.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
     "C:\\Users\\Валерия\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\3.1.0\\microsoft.aspnetcore.razor.language.3.1.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.razor.runtime\\2.2.0\\microsoft.aspnetcore.razor.runtime.2.2.0.nupkg.sha512",
@@ -62,6 +64,7 @@
     "C:\\Users\\Валерия\\.nuget\\packages\\mimekit\\2.9.1\\mimekit.2.9.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\Валерия\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
+    "C:\\Users\\Валерия\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\nuget.frameworks\\4.7.0\\nuget.frameworks.4.7.0.nupkg.sha512",
     "C:\\Users\\Валерия\\.nuget\\packages\\portable.bouncycastle\\1.8.5\\portable.bouncycastle.1.8.5.nupkg.sha512",
     "C:\\Users\\Валерия\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",

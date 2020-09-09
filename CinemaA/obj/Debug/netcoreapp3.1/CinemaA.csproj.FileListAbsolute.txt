@@ -177,11 +177,14 @@ C:\Cinema\CinemaA\bin\Debug\netcoreapp3.1\ru\Microsoft.CodeAnalysis.Workspaces.r
 C:\Cinema\CinemaA\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Cinema\CinemaA\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Cinema\CinemaA\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\CinemaA.csproj.CoreCompileInputs.cache
-C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\CinemaA.MvcApplicationPartsAssemblyInfo.cs
-C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\CinemaA.MvcApplicationPartsAssemblyInfo.cache
 C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Login.cshtml.g.cs
 C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Register.cshtml.g.cs
 C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\_ViewImports.cshtml.g.cs
 C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ValidationScriptsPartial.cshtml.g.cs
 C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewImports.cshtml.g.cs
+C:\Cinema\CinemaA\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+C:\Cinema\CinemaA\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Cinema\CinemaA\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\CinemaA.csproj.CoreCompileInputs.cache
+C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\CinemaA.MvcApplicationPartsAssemblyInfo.cs
+C:\Cinema\CinemaA\obj\Debug\netcoreapp3.1\CinemaA.MvcApplicationPartsAssemblyInfo.cache

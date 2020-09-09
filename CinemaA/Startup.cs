@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using CinemaA.Settings;
 using CinemaA.Services;
 using CinemaA.Models;
+using Newtonsoft.Json;
 
 namespace CinemaA
 {
@@ -39,7 +40,10 @@ namespace CinemaA
                 .AddDefaultUI()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    );
             services.AddRazorPages();
 
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
