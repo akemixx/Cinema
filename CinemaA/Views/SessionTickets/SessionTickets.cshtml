@@ -1,0 +1,59 @@
+﻿@model SessionTickets
+@{
+    ViewData["Title"] = "SessionTickets";
+}
+
+<h2>Film: @Model.Session.IdFilmNavigation.Title</h2>
+<h2>Hall: @Model.Session.IdHallNavigation.Title</h2>
+<h2>Date: @Model.Session.Date.ToShortDateString()</h2>
+<h2>Time: @Model.Session.Time.ToString(@"hh\:mm")</h2>
+<h2>Price: @Model.Session.Price</h2>
+
+<div style="display: flex; flex-direction: column;">
+    <div style="display: flex; flex-direction: row;">
+        <div>
+            <br /><div style="background: #808080; height: 30px; text-align: center; color: #ffffff;"> SCREEN </div>
+            <form id="myform" method="POST" asp-action="SelectSeats">
+                @{
+                    int count = 1;
+                    foreach (var item in Model.Session.Ticket)
+                    {
+                        switch (item.Status)
+                        {
+                            case "FREE":
+                                <input type="text" readonly class="btn btn-success seat" id="@item.IdSeat" value="@item.IdSeat" />
+                                break;
+                            case "BUSY":
+                                <input type="button" class="btn btn-danger seat" id="@item.IdSeat" value="@item.IdSeat" />
+                                break;
+                            case "BOOKED":
+                                <input type="button" class="btn btn-secondary seat" id="@item.IdSeat" value="@item.IdSeat" />
+                                break;
+                        }
+                        count++;
+                        if (count > 10)
+                        {
+                            <br />
+                            count = 1;
+                        }
+                    }
+                }
+                <br />
+                <input type="hidden" name="IdSession" value="@Model.Session.Id" />
+                <input type="submit" class="btn btn-primary" id="submit" value="View ticket cart" />
+            </form>
+        </div>
+        <div id="seatDescription">
+            <br />
+            <input type="button" disabled style="cursor: default; background-color: #28a745; width: 50px; height: 50px; border-color: #6c757d;" /> Available Seat <br />
+            <input type="button" disabled style="background-color: #dc3545; border-color: #dc3545; width: 50px; height: 50px;" /> Busy Seat <br />
+            <input type="button" disabled style="background-color: #6c757d; border-color: #6c757d; width: 50px; height: 50px;" /> Booked Seat <br />
+            <input type="button" disabled style="background-color: #e0a800; border-color: #d39e00; width: 50px; height: 50px;" /> Selected Seat <br />
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="~/js/SessionTickets.js"></script>
+}

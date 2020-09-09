@@ -1,0 +1,44 @@
+﻿@model FilmsSessions
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Films Sessions</h1>
+
+<div id="form">
+    @Html.AntiForgeryToken()
+    <input type="date" asp-for="FilterDate" value="@Model.FilterDate.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+    <input type="button" value="Filter" id="FilterButton" />
+</div>
+
+<div id="filteredSessions">
+    @if (Model.Films.Count == 0)
+    {
+        <p style="margin: 10px;">There are no sessions for this date. Sorry!</p>
+    }
+    else
+    {
+        foreach (Film film in Model.Films)
+        {
+            <div class="film">
+                <p>Title: @film.Title</p>
+                <p>Annotation: @film.Annotation</p>
+                <p>Genre: @film.Genre</p>
+                <p>Made In: @film.MadeIn</p>
+                <p>Format: @film.Format</p>
+                <div>
+                    @foreach (Session session in film.Session)
+                    {
+                        <a class="btn btn-info" style="margin: 5px;" asp-route-IdSession="@session.Id"
+                           asp-controller="SessionTickets" asp-action="Index">@session.Time.ToString(@"hh\:mm")</a>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts{
+    <script src="~/js/index.js"></script>
+}

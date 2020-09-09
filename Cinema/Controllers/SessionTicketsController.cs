@@ -88,7 +88,7 @@ namespace Cinema.Controllers
                                     padding: 10px;'>
                                 <p><b> Title:</b> {model.Session.IdFilmNavigation.Title} </p>
                                 <p><b>Date:</b> {model.Session.Date.ToShortDateString()} </p>
-                                <p><b> Time:</b> {model.Session.Time.ToString(@"hh\:mm")} </p>
+                                <p><b> Time:</b> {model.Session.Time:hh\:mm} </p>
                                 <p><b> Hall:</b> {model.Session.IdHallNavigation.Title} </p>
                                 <p><b> Seat:</b> {ticket.IdSeat} </p>
                                 <p><b> Price:</b> {model.Session.Price} </p>

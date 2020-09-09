@@ -55,7 +55,6 @@ C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Cinema.dll
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Cinema.pdb
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Cinema.csproj.CopyComplete
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Cinema.csprojAssemblyReference.cache
-C:\Cinema\Cinema\bin\Debug\netcoreapp2.2\appsettings.Development.json
 C:\Cinema\Cinema\bin\Debug\netcoreapp2.2\appsettings.json
 C:\Cinema\Cinema\bin\Debug\netcoreapp2.2\Properties\launchSettings.json
 C:\Cinema\Cinema\obj\Debug\netcoreapp2.2\Razor\Views\FilmsSessions\Index.cshtml.g.cs
