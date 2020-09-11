@@ -1,5 +1,4 @@
-
-Cinema/appsettings.Development.json
-Cinema/appsettings.Development.json
-CinemaA/bin/Debug/netcoreapp3.1/appsettings.Development.json
 CinemaA/appsettings.Development.json
+CinemaA/bin/*
+CinemaA/obj/*
+.vs/*
