@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Ticket>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Purchases History</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Buying Date
+            </th>
+            <th>
+                @Html.DisplayNameFor(ticket => ticket.Session.Film.Title)
+            </th>
+            <th>
+                Session Date
+            </th>
+            <th>
+                @Html.DisplayNameFor(ticket => ticket.Session.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(ticket => ticket.Session.Hall.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(ticket => ticket.Session.Film.Format)
+            </th>
+            <th>
+                Seat
+            </th>
+            @*<th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model)
+        {
+        <tr>
+            <td>
+                @ticket.BuyingDateTime.ToString("dd.MM.yyyy HH:mm")
+            </td>
+            <td>
+                @Html.DisplayFor(_ => ticket.Session.Film.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(_ => ticket.Session.Date)
+            </td>
+            <td>
+                @ticket.Session.Time.ToString(@"hh\:mm")
+            </td>
+            <td>
+                @Html.DisplayFor(_ => ticket.Session.Hall.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(_ => ticket.Session.Film.Format)
+            </td>
+            <td>
+                @Html.DisplayFor(_ => ticket.IdSeat)
+            </td>
+            @*
+                Place for returning ticket link.
+                <td>
+            <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@ticket.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>
+        </td>*@
+        </tr>
+        }
+    </tbody>
+</table>

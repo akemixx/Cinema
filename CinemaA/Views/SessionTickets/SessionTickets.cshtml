@@ -3,8 +3,8 @@
     ViewData["Title"] = "SessionTickets";
 }
 
-<h2>Film: @Model.Session.IdFilmNavigation.Title</h2>
-<h2>Hall: @Model.Session.IdHallNavigation.Title</h2>
+<h2>Film: @Model.Session.Film.Title</h2>
+<h2>Hall: @Model.Session.Hall.Title</h2>
 <h2>Date: @Model.Session.Date.ToShortDateString()</h2>
 <h2>Time: @Model.Session.Time.ToString(@"hh\:mm")</h2>
 <h2>Price: @Model.Session.Price</h2>
@@ -16,18 +16,19 @@
             <form id="myform" method="POST" asp-action="SelectSeats">
                 @{
                     int count = 1;
-                    foreach (var item in Model.Session.Ticket)
+                    foreach (var ticket in Model.Session.Tickets)
                     {
-                        switch (item.Status)
+                        switch (ticket.Status)
                         {
                             case "FREE":
-                                <input type="text" readonly class="btn btn-success seat" id="@item.IdSeat" value="@item.IdSeat" />
+                                <input type="text" readonly class="btn btn-success seat" value="@ticket.IdSeat" />
+                                <input type="hidden" id="@ticket.IdSeat" value="@ticket.Id" />
                                 break;
                             case "BUSY":
-                                <input type="button" class="btn btn-danger seat" id="@item.IdSeat" value="@item.IdSeat" />
+                                <input type="button" class="btn btn-danger seat" value="@ticket.IdSeat" />
                                 break;
                             case "BOOKED":
-                                <input type="button" class="btn btn-secondary seat" id="@item.IdSeat" value="@item.IdSeat" />
+                                <input type="button" class="btn btn-secondary seat" value="@ticket.IdSeat" />
                                 break;
                         }
                         count++;
@@ -39,7 +40,7 @@
                     }
                 }
                 <br />
-                <input type="hidden" name="IdSession" value="@Model.Session.Id" />
+                <input type="hidden" name="sessionId" value="@Model.Session.Id" />
                 <input type="submit" class="btn btn-primary" id="submit" value="View ticket cart" />
             </form>
         </div>

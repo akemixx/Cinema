@@ -7,12 +7,21 @@ using CinemaA.Data;
 using CinemaA.Models;
 using Microsoft.AspNetCore.Authorization;
 
+/*
+ * Films Controller
+ * Model: Film
+ * Functions:
+ * 1) Show a list of all films. 
+ * 2) Create a new film.
+ * 3) Edit/show details/delete films from the list.
+ */
+
 namespace CinemaA.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class FilmsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public DateTime FilterDate { get; set; }
 
         public FilmsController(ApplicationDbContext context)
         {
@@ -22,7 +31,10 @@ namespace CinemaA.Controllers
         // GET: Films
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Film.ToListAsync());
+            return View(await _context.Films
+                .OrderByDescending(film => film.ShownOnScreen)
+                .ThenBy(film => film.Title)
+                .ToListAsync());
         }
 
         // GET: Films/Details/5
@@ -33,8 +45,8 @@ namespace CinemaA.Controllers
                 return NotFound();
             }
 
-            var film = await _context.Film
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var film = await _context.Films
+                .FirstOrDefaultAsync(film => film.Id == id);
             if (film == null)
             {
                 return NotFound();
@@ -50,8 +62,6 @@ namespace CinemaA.Controllers
         }
 
         // POST: Films/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Annotation,Genre,MadeIn,Format")] Film film)
@@ -73,7 +83,7 @@ namespace CinemaA.Controllers
                 return NotFound();
             }
 
-            var film = await _context.Film.FindAsync(id);
+            var film = await _context.Films.FindAsync(id);
             if (film == null)
             {
                 return NotFound();
@@ -82,11 +92,9 @@ namespace CinemaA.Controllers
         }
 
         // POST: Films/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Annotation,Genre,MadeIn,Format")] Film film)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Annotation,Genre,MadeIn,Format,ShownOnScreen")] Film film)
         {
             if (id != film.Id)
             {
@@ -124,8 +132,8 @@ namespace CinemaA.Controllers
                 return NotFound();
             }
 
-            var film = await _context.Film
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var film = await _context.Films
+                .FirstOrDefaultAsync(film => film.Id == id);
             if (film == null)
             {
                 return NotFound();
@@ -139,15 +147,15 @@ namespace CinemaA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var film = await _context.Film.FindAsync(id);
-            _context.Film.Remove(film);
+            var film = await _context.Films.FindAsync(id);
+            _context.Films.Remove(film);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FilmExists(int id)
         {
-            return _context.Film.Any(e => e.Id == id);
+            return _context.Films.Any(film => film.Id == id);
         }
     }
 }

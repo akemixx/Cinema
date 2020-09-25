@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
+/* 
+ * Used for sending tickets bought/booked by a user using email.
+ */
 namespace CinemaA.Mails
 {
     public class MailRequest

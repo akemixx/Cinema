@@ -1,4 +1,8 @@
-﻿namespace CinemaA.Settings
+﻿/*
+ * Settings for sending emails, stored in configuration file (appsettings.json).
+ */
+
+namespace CinemaA.Settings
 {
     public class MailSettings
     {

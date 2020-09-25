@@ -8,6 +8,8 @@
 
 <p>
     <a asp-action="Create">Create New</a>
+    <br />
+    <a asp-action="CreateInterval">Create Interval of Sessions</a>
 </p>
 <table class="table">
     <thead>
@@ -31,27 +33,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var session in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
+                @Html.DisplayFor(_ => session.Date)
             </td>
             <td>
-                @item.Time.ToString(@"hh\:mm")
+                @session.Time.ToString(@"hh\:mm")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(_ => session.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdFilmNavigation.Title)
+                @Html.DisplayFor(_ => session.Film.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdHallNavigation.Title)
+                @Html.DisplayFor(_ => session.Hall.Title)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@session.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@session.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@session.Id">Delete</a>
             </td>
         </tr>
 }

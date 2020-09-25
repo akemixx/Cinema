@@ -10,23 +10,23 @@
 @if (Model.SelectedTickets.Count == 0)
 {
     <p>You should choose at least one seat.</p>
-    <a href='@Url.Action("Index", "SessionTickets", new { IdSession = Model.Session.Id })'>Move back</a>
+    <a href='@Url.Action("Index", "SessionTickets", new { sessionId = Model.Session.Id })'>Move back</a>
 }
 else
 {
 <form id="form" method="post" asp-action="ChooseFormAction">
-    <input type="hidden" name="IdSession" value="@Model.Session.Id" />
+    <input type="hidden" name="sessionId" value="@Model.Session.Id" />
     @{
         for (int i = 0; i < Model.SelectedTickets.Count; i++)
         {
             <div class="ticket">
-                <p><b>Title:</b> @Model.Session.IdFilmNavigation.Title</p>
+                <p><b>Title:</b> @Model.Session.Film.Title</p>
                 <p><b>Date:</b> @Model.Session.Date.ToShortDateString()</p>
                 <p><b>Time:</b> @Model.Session.Time.ToString(@"hh\:mm")</p>
-                <p><b>Hall:</b> @Model.Session.IdHallNavigation.Title</p>
+                <p><b>Hall:</b> @Model.Session.Hall.Title</p>
                 <p><b>Seat:</b> @Model.SelectedTickets[i].IdSeat</p>
                 <p><b>Price:</b> @Model.Session.Price</p>
-                <input type="hidden" name="SelectedSeats[]" value="@Model.SelectedTickets[i].IdSeat" />
+                <input type="hidden" name="selectedTicketsIds[]" value="@Model.SelectedTickets[i].Id" />
                 <input type="button" id="@i" name="deleteButton" value="Delete" onclick="
     document.getElementById('totalPrice').innerHTML = document.getElementById('totalPrice').innerHTML - @Model.Session.Price;
     document.getElementsByName('totalPrice')[0].value = document.getElementById('totalPrice').innerHTML;
@@ -46,10 +46,10 @@ else
         <label><b>Fill the form:</b></label>
         <br />
         <label>Name:</label>
-        <input type="text" required name="Name" placeholder="Ivan" />
+        <input type="text" required name="userName" placeholder="Ivan" />
         <br />
         <label>Email:</label>
-        <input type="email" required name="Email" placeholder="aaa@gmail.com" />
+        <input type="email" required name="userEmail" placeholder="aaa@gmail.com" />
     }
     else
     {
@@ -60,8 +60,8 @@ else
         </div>
     }
     <br />
-    <input type="submit" class="button" name="BuyTickets" value="Buy tickets" />
-    <input type="submit" class="button" name="BookTickets" value="Book tickets" />
+    <input type="submit" class="button" name="formAction" value="Buy tickets" />
+    <input type="submit" class="button" name="formAction" value="Book tickets" />
 </form>
 }
 

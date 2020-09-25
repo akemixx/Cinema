@@ -26,31 +26,37 @@
             <th>
                 @Html.DisplayNameFor(model => model.Format)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShownOnScreen)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var film in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(_ => film.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Annotation)
+                @Html.DisplayFor(_ => film.Annotation)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Genre)
+                @Html.DisplayFor(_ => film.Genre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MadeIn)
+                @Html.DisplayFor(_ => film.MadeIn)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Format)
+                @Html.DisplayFor(_ => film.Format)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(_ => film.ShownOnScreen)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@film.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@film.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@film.Id">Delete</a>
             </td>
         </tr>
 }

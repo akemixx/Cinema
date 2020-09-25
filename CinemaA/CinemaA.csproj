@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200920165034_FilmShownOnScreenDefaultValue.cs" />
+    <Compile Remove="Migrations\20200920165034_FilmShownOnScreenDefaultValue.Designer.cs" />
+    <Compile Remove="Migrations\20200920165434_FilmShownOnScreenDefaultValue.cs" />
+    <Compile Remove="Migrations\20200920165434_FilmShownOnScreenDefaultValue.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MailKit" Version="2.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />

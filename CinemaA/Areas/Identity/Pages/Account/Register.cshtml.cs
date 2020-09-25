@@ -49,7 +49,7 @@ namespace CinemaA.Areas.Identity.Pages.Account
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Name")]
-            public string NameOfUser { get; set; }
+            public string RealName { get; set; }
 
             [Required]
             [EmailAddress]
@@ -80,7 +80,7 @@ namespace CinemaA.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email, NameOfUser = Input.NameOfUser };
+                var user = new User { UserName = Input.Email, Email = Input.Email, RealName = Input.RealName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

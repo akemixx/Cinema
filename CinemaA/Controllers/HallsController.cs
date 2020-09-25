@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CinemaA.Data;
 using CinemaA.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
+/*
+ * Halls Controller
+ * Model: Hall
+ * Functions:
+ * 1) Show a list of all halls. 
+ * 2) Create a new hall.
+ * 3) Edit/show details/delete halls from the list.
+ */
 
 namespace CinemaA.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class HallsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +30,7 @@ namespace CinemaA.Controllers
         // GET: Halls
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Hall.ToListAsync());
+            return View(await _context.Halls.ToListAsync());
         }
 
         // GET: Halls/Details/5
@@ -33,8 +41,8 @@ namespace CinemaA.Controllers
                 return NotFound();
             }
 
-            var hall = await _context.Hall
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var hall = await _context.Halls
+                .FirstOrDefaultAsync(hall => hall.Id == id);
             if (hall == null)
             {
                 return NotFound();
@@ -50,8 +58,6 @@ namespace CinemaA.Controllers
         }
 
         // POST: Halls/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,SeatsNum")] Hall hall)
@@ -73,7 +79,7 @@ namespace CinemaA.Controllers
                 return NotFound();
             }
 
-            var hall = await _context.Hall.FindAsync(id);
+            var hall = await _context.Halls.FindAsync(id);
             if (hall == null)
             {
                 return NotFound();
@@ -82,8 +88,6 @@ namespace CinemaA.Controllers
         }
 
         // POST: Halls/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,SeatsNum")] Hall hall)
@@ -124,8 +128,8 @@ namespace CinemaA.Controllers
                 return NotFound();
             }
 
-            var hall = await _context.Hall
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var hall = await _context.Halls
+                .FirstOrDefaultAsync(hall => hall.Id == id);
             if (hall == null)
             {
                 return NotFound();
@@ -139,15 +143,15 @@ namespace CinemaA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var hall = await _context.Hall.FindAsync(id);
-            _context.Hall.Remove(hall);
+            var hall = await _context.Halls.FindAsync(id);
+            _context.Halls.Remove(hall);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool HallExists(int id)
         {
-            return _context.Hall.Any(e => e.Id == id);
+            return _context.Halls.Any(hall => hall.Id == id);
         }
     }
 }

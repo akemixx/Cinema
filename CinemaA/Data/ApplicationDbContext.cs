@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CinemaA.Models;
+﻿using CinemaA.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,62 +8,58 @@ namespace CinemaA.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        {
-        }
+        { }
 
-        public virtual DbSet<Film> Film { get; set; }
-        public virtual DbSet<Hall> Hall { get; set; }
-        public virtual DbSet<Session> Session { get; set; }
-        public virtual DbSet<Ticket> Ticket { get; set; }
+        public DbSet<Film> Films { get; set; }
+        public DbSet<Hall> Halls { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
-            modelBuilder.Entity<Film>(entity =>
+            modelBuilder.Entity<Film>(film =>
             {
-                entity.Property(e => e.Format)
+                film.Property(f => f.Format)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasDefaultValueSql("('2D')");
 
-                entity.Property(e => e.MadeIn).IsRequired();
-
-                entity.Property(e => e.Title).IsRequired();
+                film.Property(f => f.MadeIn).IsRequired();
+                film.Property(f => f.Title).IsRequired();
             });
 
-            modelBuilder.Entity<Hall>(entity =>
+            modelBuilder.Entity<Hall>(hall =>
             {
-                entity.Property(e => e.Title).IsRequired();
+                hall.Property(h => h.Title).IsRequired();
+                hall.Property(h => h.SeatsNum).IsRequired();
             });
 
-            modelBuilder.Entity<Session>(entity =>
+            modelBuilder.Entity<Session>(session =>
             {
-                entity.Property(e => e.Date).HasColumnType("date");
-
-                entity.HasOne(d => d.IdFilmNavigation)
-                    .WithMany(p => p.Session)
-                    .HasForeignKey(d => d.IdFilm)
+                session.Property(s => s.Date).HasColumnType("date");
+                session.HasOne(s => s.Film)
+                    .WithMany(f => f.Sessions)
+                    .HasForeignKey(s => s.IdFilm)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Session_ToFilm");
-
-                entity.HasOne(d => d.IdHallNavigation)
-                    .WithMany(p => p.Session)
-                    .HasForeignKey(d => d.IdHall)
+                session.HasOne(s => s.Hall)
+                    .WithMany(h => h.Sessions)
+                    .HasForeignKey(s => s.IdHall)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Session_ToHall");
             });
 
-            modelBuilder.Entity<Ticket>(entity =>
+            modelBuilder.Entity<Ticket>(ticket =>
             {
-                entity.Property(e => e.Status)
+                ticket.Property(t => t.Status)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasDefaultValueSql("('FREE')");
-
-                entity.HasOne(d => d.IdSessionNavigation)
-                    .WithMany(p => p.Ticket)
-                    .HasForeignKey(d => d.IdSession)
+                ticket.HasOne(t => t.Session)
+                    .WithMany(s => s.Tickets)
+                    .HasForeignKey(t => t.IdSession)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Ticket_ToSession");
             });
@@ -75,3 +68,4 @@ namespace CinemaA.Data
         }
     }
 }
+

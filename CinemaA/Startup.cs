@@ -10,6 +10,7 @@ using CinemaA.Settings;
 using CinemaA.Services;
 using CinemaA.Models;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 
 namespace CinemaA
 {
@@ -45,14 +46,17 @@ namespace CinemaA
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     );
             services.AddRazorPages();
-
+            // Token for getting AJAX requests.
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+            // Configure settings for email sending.
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.Configure<User>(Configuration.GetSection("AdminUserForTesting"));
+            // Add service for email senging.
             services.AddTransient<IMailService, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<User> userManager, IOptions<User> _adminUser)
         {
             if (env.IsDevelopment())
             {
@@ -66,10 +70,25 @@ namespace CinemaA
                 app.UseHsts();
             }
 
-            try  // to prevent a problem with creating an initial DB
+            // Create an "Admin" role if it doesn't exist in the DB.
+            try
             {
                 if (!roleManager.RoleExistsAsync("Admin").Result)
                     roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
+            }
+            catch { }
+
+            // Create a user with admin role using data from configuration if it doesn't exist.
+            try
+            {
+                User adminUser = _adminUser.Value;
+                string password = Configuration.GetValue<string>("DefaultPassword");
+                if (userManager.FindByEmailAsync(adminUser.Email).Result == null)
+                {
+                    var user = new User { UserName = adminUser.Email, Email = adminUser.Email, RealName = adminUser.RealName };
+                    userManager.CreateAsync(user, password).Wait();
+                    userManager.AddToRoleAsync(user, "Admin");
+                }
             }
             catch { }
 
@@ -85,7 +104,7 @@ namespace CinemaA
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=FilmsSessions}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

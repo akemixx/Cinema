@@ -1,41 +1,48 @@
-﻿// function to delete ticket from ticket cart
+﻿/*
+ * Scripts for TicketCart view of SessionTickets's Controller
+ * Functions:
+ * 1) Deleting ticket from the ticket cart.
+ * 2) Paying or making sale for a ticket using user's bonuses, ajax request for changing DB data.
+ */
+
+// Delete a ticket from a ticket cart. 
 function DeleteTicket(id) {
-    var btn = document.getElementById(id);
-    var btnParentParentNode = btn.parentNode.parentNode;
-    btnParentParentNode.removeChild(btn.parentNode);
+    var ticketDeleteButton = document.getElementById(id);
+    var divWithAllTheTickets = ticketDeleteButton.parentNode.parentNode;
+    divWithAllTheTickets.removeChild(ticketDeleteButton.parentNode);
     if (document.getElementsByClassName("ticket").length == 0) {
-        btnParentParentNode.innerHTML = `<p>You should choose at least one seat.</p>
-            <a href="/SessionTickets?IdSession=${
-                document.getElementsByName("IdSession")[0].getAttribute("value")
+        divWithAllTheTickets.innerHTML = `<p>You should choose at least one seat.</p>
+            <a href="/SessionTickets?sessionId=${
+                document.getElementsByName("sessionId")[0].getAttribute("value")
                 }">Move back</a>`;  
     }
 }
 
-// pay or make sale by personal bonuses 
+// Pay or make a sale for a ticket using authenticated user's bonuses.
 async function PayByBonuses() {
     var totalPrice = parseFloat(document.getElementById("totalPrice").innerHTML);
-    var bonuses = parseFloat(document.getElementById("bonuses").innerHTML.replace(",", "."));
-    if (totalPrice >= bonuses) {
-        totalPrice = totalPrice - bonuses;
-        bonuses = 0;
+    var userBonuses = parseFloat(document.getElementById("bonuses").innerHTML.replace(",", "."));
+    if (totalPrice >= userBonuses) {
+        totalPrice = totalPrice - userBonuses;
+        userBonuses = 0;
     }
     else {
-        bonuses = bonuses - totalPrice;
+        userBonuses = userBonuses - totalPrice;
         totalPrice = 0;
     }
     document.getElementById("totalPrice").innerHTML = totalPrice;
     document.getElementsByName("totalPrice")[0].value = totalPrice;
-    document.getElementById("bonuses").innerHTML = bonuses;
+    document.getElementById("bonuses").innerHTML = userBonuses;
 
-    // ajax request for renewing bonuses count
+    // Ajax request for renewing bonuses count of a user in the DB.
     let xsrf_token = document.getElementsByName("__RequestVerificationToken")[0].value;
-    const url = '/SessionTickets/RenewBonusesCount';
+    const url = '/SessionTickets/RenewBonusesCountAjax';
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'include',
-            body: JSON.stringify(bonuses),
+            body: JSON.stringify(userBonuses),
             headers: {
                 "XSRF-TOKEN": xsrf_token,
                 "Content-Type": "application/json"

@@ -22,18 +22,18 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var hall in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(_ => hall.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SeatsNum)
+                @Html.DisplayFor(_ => hall.SeatsNum)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@hall.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@hall.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@hall.Id">Delete</a>
             </td>
         </tr>
 }

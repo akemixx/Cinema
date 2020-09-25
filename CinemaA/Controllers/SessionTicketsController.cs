@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using CinemaA.Mails;
 using CinemaA.Services;
 using CinemaA.Data;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CinemaA.Models;
 using Microsoft.AspNetCore.Identity;
+
+/*
+ * SessionTickets Controller
+ * View model: SessionTickets
+ * Functions:
+ * 1) Show a scheme of seats in the hall.
+ * 2) Buy/book tickets of a specific session.
+ * 3) Send tickets by email.
+ * 4) Renew bonuses count for authenticated users (bonuses are awarded for ticket purchases).
+ */
 
 namespace CinemaA.Controllers
 {
@@ -32,50 +38,64 @@ namespace CinemaA.Controllers
         }
 
         // GET: SessionTickets
-        public IActionResult Index(int IdSession)
+        public IActionResult Index(int sessionId)
         {
-            SessionTickets model = new SessionTickets(IdSession, _context);
-            return View("SessionTickets", model);
+            var viewModel = new SessionTickets(sessionId, _context);
+            return View("SessionTickets", viewModel);
         }
 
-        // selecting seats
+        // Get ids of tickets selected by user and show a ticket cart.
         [HttpPost]
-        public IActionResult SelectSeats(int IdSession, List<int> SelectedSeats)
+        public IActionResult SelectSeats(int sessionId, List<int> selectedTicketsIds)
         {
-            SessionTickets model = CreateModel(IdSession, SelectedSeats);
-            return View("TicketCart", model);
+            SessionTickets viewModel = CreateViewModel(sessionId, selectedTicketsIds);
+            return View("TicketCart", viewModel);
         }
 
-        // booking/buying tickets from ticket cart and sending email message
+        // Get ticket cart with selected tickets, change their statuses (bought/booked).
+        // Renew bonuses count and send email with tickets.
         [HttpPost]
-        public async Task<IActionResult> ChooseFormAction(int IdSession, List<int> SelectedSeats, string totalPrice, string Name, string Email)
+        public async Task<IActionResult> ChooseFormAction(
+            int sessionId, 
+            List<int> selectedTicketsIds, 
+            string totalPrice, 
+            string userName, 
+            string userEmail,
+            string formAction)
         {
-            SessionTickets model = CreateModel(IdSession, SelectedSeats);
             if (ModelState.IsValid)
             {
-                string status;
-                if (Request.Form.FirstOrDefault(x => x.Key == "BuyTickets").Key != null) // buy tickets
+                SessionTickets viewModel = CreateViewModel(sessionId, selectedTicketsIds);
+                string newTicketStatus;
+                if (User.Identity.IsAuthenticated)
                 {
-                    ProcessTickets(IdSession, SelectedSeats, "BUSY");
-                    status = "Bought";
-                    if (User.Identity.IsAuthenticated)
+                    var user = await _userManager.GetUserAsync(User);
+                    userName = user.RealName;
+                    userEmail = user.Email;
+                    if(formAction == "Buy tickets")
                     {
-                        var user = await _userManager.GetUserAsync(User);
-                        Name = user.NameOfUser;
-                        Email = user.Email;
                         double newTotalPrice = Convert.ToDouble(totalPrice.Replace('.', ','));
                         user.Bonuses += Convert.ToDouble((newTotalPrice * 0.1).ToString("N2"));
                         await _userManager.UpdateAsync(user);
                     }
                 }
-                else  // book tickets
+                if (formAction == "Buy tickets")
                 {
-                    ProcessTickets(IdSession, SelectedSeats, "BOOKED");
-                    status = "Booked";
+                    if (User.Identity.IsAuthenticated)
+                    {
+
+                    }
+                    ProcessTickets(viewModel, "BUSY", userEmail);
+                    newTicketStatus = "Bought";
+                }
+                else
+                {
+                    ProcessTickets(viewModel, "BOOKED", userEmail);
+                    newTicketStatus = "Booked";
                 }
                 try
                 {
-                    await SendEmailMessageAsync(Name, Email, status, model);
+                    await SendEmailMessageAsync(userName, userEmail, newTicketStatus, viewModel);
                 }
                 catch (Exception ex)
                 {
@@ -86,44 +106,50 @@ namespace CinemaA.Controllers
             return View("Error");
         }
 
-        // renew personal bonuses count
+        // Renew user bonuses count using data from AJAX request.
         [HttpPost]
-        public async Task RenewBonusesCount([FromBody] double bonuses)
+        public async Task RenewBonusesCountAjax([FromBody] double userBonuses)
         {
             var user = await _userManager.GetUserAsync(User);
-            user.Bonuses = bonuses;
+            user.Bonuses = userBonuses;
             await _userManager.UpdateAsync(user);
         }
 
-        // creating mail and sending it to user
-        private async Task SendEmailMessageAsync(string Name, string Email, string status, SessionTickets model)
+        // Create mail request, fill text with tickets data and send it to user email.
+        private async Task SendEmailMessageAsync(
+            string userName, 
+            string userEmail, 
+            string newTicketStatus, 
+            SessionTickets viewModel)
         {
-            var request = new MailRequest()
+            var mailRequest = new MailRequest()
             {
-                ToEmail = Email,
+                ToEmail = userEmail,
                 Subject = "Online cinema booking",
-                Body = $"Thanks for your interest to our cinema, {Name}. Here are your tickets: "
+                Body = $"Thanks for your interest to our cinema, {userName}. Here are your tickets: "
             };
-            foreach (var ticket in model.SelectedTickets)
+            foreach (var ticket in viewModel.SelectedTickets)
             {
-                request.Body += $@"<div style='background: antiquewhite;
-                                    font-size: 15px;
-                                    border: 1px solid black;
-                                    text-align: justify;
-                                    margin: 10px;
-                                    padding: 10px;'>
-                                <p><b> Title:</b> {model.Session.IdFilmNavigation.Title} </p>
-                                <p><b>Date:</b> {model.Session.Date.ToShortDateString()} </p>
-                                <p><b> Time:</b> {model.Session.Time:hh\:mm} </p>
-                                <p><b> Hall:</b> {model.Session.IdHallNavigation.Title} </p>
-                                <p><b> Seat:</b> {ticket.IdSeat} </p>
-                                <p><b> Price:</b> {model.Session.Price} </p>
-                                <p><b> Status:</b> {status} </p></br></div>";
+                mailRequest.Body += $@"
+                    <div style='background: antiquewhite;
+                        font-size: 15px;
+                        border: 1px solid black;
+                        text-align: justify;
+                        margin: 10px;
+                        padding: 10px;'>
+                            <p><b> Title:</b> {viewModel.Session.Film.Title} </p>
+                            <p><b>Date:</b> {viewModel.Session.Date.ToShortDateString()} </p>
+                            <p><b> Time:</b> {viewModel.Session.Time:hh\:mm} </p>
+                            <p><b> Hall:</b> {viewModel.Session.Hall.Title} </p>
+                            <p><b> Seat:</b> {ticket.IdSeat} </p>
+                            <p><b> Price:</b> {viewModel.Session.Price} </p>
+                            <p><b> Status:</b> {newTicketStatus} </p></br></div>";
             }
-            request.Body += "<b>If you've booked tickets you have to pay for them at least an hour and a half before the session!</b>";
+            mailRequest.Body += $@"<b>If you've booked tickets you have to pay for them at least an hour and a
+                half before the session!</b>";
             try
             {
-                await _mailService.SendEmailAsync(request);
+                await _mailService.SendEmailAsync(mailRequest);
             }
             catch (Exception ex)
             {
@@ -131,28 +157,35 @@ namespace CinemaA.Controllers
             }
         }
 
-        // create SessionTickets model from session id and list of selected seats
-        private SessionTickets CreateModel(int IdSession, List<int> SelectedSeats)
+        // Create SessionTickets view model using id of session and list of tickets ids.
+        private SessionTickets CreateViewModel(int sessionId, List<int> selectedTicketsIds)
         {
-            List<Ticket> SelectedTickets = new List<Ticket>();
-            foreach (int IdSeat in SelectedSeats)
+            var viewModel = new SessionTickets(sessionId, _context);
+            Ticket changedTicket;
+            foreach (int id in selectedTicketsIds)
             {
-                var ChangedTicket = _context.Ticket.Where(item => item.IdSession == IdSession && item.IdSeat == IdSeat)
-                                               .FirstOrDefault();
-                SelectedTickets.Add(ChangedTicket);
+                changedTicket = viewModel.Session.Tickets
+                    .Where(ticket => ticket.Id == id)
+                    .FirstOrDefault();
+                viewModel.SelectedTickets.Add(changedTicket);
             }
-            return new SessionTickets(IdSession, SelectedTickets, _context);
+            return viewModel;
         }
 
-        // change status of ticket in the db to bought or booked
-        private void ProcessTickets(int IdSession, List<int> SelectedSeats, string NewStatus)
+        // Change status of the ticket in DB to booked or bought, mark the time of purchase and the buyer.
+        private void ProcessTickets(SessionTickets viewModel, string newTicketStatus, string userEmail)
         {
-            foreach (int IdSeat in SelectedSeats)
+            int SessionId = viewModel.Session.Id;
+            Ticket ChangedTicket;
+            foreach (var ticket in viewModel.SelectedTickets)
             {
-                var ChangedTicket = _context.Ticket.Where(item => item.IdSession == IdSession && item.IdSeat == IdSeat)
-                                               .FirstOrDefault();
-                _context.Ticket.Attach(ChangedTicket); // State = Unchanged
-                ChangedTicket.Status = NewStatus; // State = Modified, and only the Status property is dirty.
+                ChangedTicket = _context.Tickets
+                    .Where(_ticket => _ticket.Id == ticket.Id)
+                    .FirstOrDefault();
+                _context.Tickets.Attach(ChangedTicket); 
+                ChangedTicket.Status = newTicketStatus;
+                ChangedTicket.BuyerEmail = userEmail;
+                ChangedTicket.BuyingDateTime = DateTime.Now;
             }
             _context.SaveChanges();
         }

@@ -37,9 +37,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Halls" asp-action="Index">Halls (a)</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="FilmsSessions" asp-action="Index">Sessions</a>
-                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="PurchasesHistory" asp-action="Index">Purchases History</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -52,13 +55,9 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - CinemaA - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

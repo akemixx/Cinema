@@ -1,4 +1,6 @@
-﻿namespace CinemaA.Models
+﻿using System;
+
+namespace CinemaA.Models
 {
     public partial class Ticket
     {
@@ -6,7 +8,9 @@
         public int IdSession { get; set; }
         public int IdSeat { get; set; }
         public string Status { get; set; }
-
-        public virtual Session IdSessionNavigation { get; set; }
+        public string BuyerEmail { get; set; }
+        public DateTime BuyingDateTime { get; set; }
+        //
+        public Session Session { get; set; }
     }
 }
