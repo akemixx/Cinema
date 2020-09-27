@@ -74,6 +74,38 @@ namespace CinemaA.Migrations
                     b.ToTable("Halls");
                 });
 
+            modelBuilder.Entity("CinemaA.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BuyerEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("BuyingDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("CinemaA.Models.Session", b =>
                 {
                     b.Property<int>("Id")
@@ -111,12 +143,6 @@ namespace CinemaA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("BuyerEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("BuyingDateTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("IdSeat")
                         .HasColumnType("int");
@@ -338,6 +364,19 @@ namespace CinemaA.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("CinemaA.Models.Order", b =>
+                {
+                    b.HasOne("CinemaA.Models.Ticket", "Ticket")
+                        .WithOne("Order")
+                        .HasForeignKey("CinemaA.Models.Order", "TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CinemaA.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("CinemaA.Models.Session", b =>

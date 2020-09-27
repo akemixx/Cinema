@@ -66,12 +66,21 @@ namespace CinemaA.Controllers
             if (ModelState.IsValid)
             {
                 SessionTickets viewModel = CreateViewModel(sessionId, selectedTicketsIds);
+                User user = new User();
+                user.Email = userEmail;
+                user.RealName = userName;
                 string newTicketStatus;
+                if (formAction == "Buy tickets")
+                {
+                    newTicketStatus = "BOUGHT";
+                }
+                else
+                {
+                    newTicketStatus = "BOOKED";
+                }
                 if (User.Identity.IsAuthenticated)
                 {
-                    var user = await _userManager.GetUserAsync(User);
-                    userName = user.RealName;
-                    userEmail = user.Email;
+                    user = await _userManager.GetUserAsync(User);
                     if(formAction == "Buy tickets")
                     {
                         double newTotalPrice = Convert.ToDouble(totalPrice.Replace('.', ','));
@@ -79,23 +88,10 @@ namespace CinemaA.Controllers
                         await _userManager.UpdateAsync(user);
                     }
                 }
-                if (formAction == "Buy tickets")
-                {
-                    if (User.Identity.IsAuthenticated)
-                    {
-
-                    }
-                    ProcessTickets(viewModel, "BUSY", userEmail);
-                    newTicketStatus = "Bought";
-                }
-                else
-                {
-                    ProcessTickets(viewModel, "BOOKED", userEmail);
-                    newTicketStatus = "Booked";
-                }
+                ProcessTickets(viewModel, newTicketStatus, user);
                 try
                 {
-                    await SendEmailMessageAsync(userName, userEmail, newTicketStatus, viewModel);
+                    await _mailService.SendEmailMessageAsync(user.RealName, user.Email, newTicketStatus, viewModel);
                 }
                 catch (Exception ex)
                 {
@@ -115,48 +111,6 @@ namespace CinemaA.Controllers
             await _userManager.UpdateAsync(user);
         }
 
-        // Create mail request, fill text with tickets data and send it to user email.
-        private async Task SendEmailMessageAsync(
-            string userName, 
-            string userEmail, 
-            string newTicketStatus, 
-            SessionTickets viewModel)
-        {
-            var mailRequest = new MailRequest()
-            {
-                ToEmail = userEmail,
-                Subject = "Online cinema booking",
-                Body = $"Thanks for your interest to our cinema, {userName}. Here are your tickets: "
-            };
-            foreach (var ticket in viewModel.SelectedTickets)
-            {
-                mailRequest.Body += $@"
-                    <div style='background: antiquewhite;
-                        font-size: 15px;
-                        border: 1px solid black;
-                        text-align: justify;
-                        margin: 10px;
-                        padding: 10px;'>
-                            <p><b> Title:</b> {viewModel.Session.Film.Title} </p>
-                            <p><b>Date:</b> {viewModel.Session.Date.ToShortDateString()} </p>
-                            <p><b> Time:</b> {viewModel.Session.Time:hh\:mm} </p>
-                            <p><b> Hall:</b> {viewModel.Session.Hall.Title} </p>
-                            <p><b> Seat:</b> {ticket.IdSeat} </p>
-                            <p><b> Price:</b> {viewModel.Session.Price} </p>
-                            <p><b> Status:</b> {newTicketStatus} </p></br></div>";
-            }
-            mailRequest.Body += $@"<b>If you've booked tickets you have to pay for them at least an hour and a
-                half before the session!</b>";
-            try
-            {
-                await _mailService.SendEmailAsync(mailRequest);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         // Create SessionTickets view model using id of session and list of tickets ids.
         private SessionTickets CreateViewModel(int sessionId, List<int> selectedTicketsIds)
         {
@@ -172,11 +126,22 @@ namespace CinemaA.Controllers
             return viewModel;
         }
 
-        // Change status of the ticket in DB to booked or bought, mark the time of purchase and the buyer.
-        private void ProcessTickets(SessionTickets viewModel, string newTicketStatus, string userEmail)
+        // Change status of the ticket in DB to booked or bought, create a new order.
+        private void ProcessTickets(SessionTickets viewModel, string newTicketStatus, User user)
         {
             int SessionId = viewModel.Session.Id;
             Ticket ChangedTicket;
+            var newOrder = new Order();
+            if (_context.Users.Find(user.Id) != null)
+            {
+                newOrder.UserId = user.Id;
+            }
+            else
+            {
+                newOrder.BuyerEmail = user.Email;
+                newOrder.Name = user.RealName;
+            }
+            newOrder.BuyingDateTime = DateTime.Now;
             foreach (var ticket in viewModel.SelectedTickets)
             {
                 ChangedTicket = _context.Tickets
@@ -184,10 +149,10 @@ namespace CinemaA.Controllers
                     .FirstOrDefault();
                 _context.Tickets.Attach(ChangedTicket); 
                 ChangedTicket.Status = newTicketStatus;
-                ChangedTicket.BuyerEmail = userEmail;
-                ChangedTicket.BuyingDateTime = DateTime.Now;
+                newOrder.TicketId = ticket.Id;
+                _context.Add(newOrder);
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
         }
     }
 }

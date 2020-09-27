@@ -1,4 +1,5 @@
 ﻿using CinemaA.Mails;
+using CinemaA.Models;
 using System.Threading.Tasks;
 
 /*
@@ -9,6 +10,9 @@ namespace CinemaA.Services
 {
     public interface IMailService
     {
-        Task SendEmailAsync(MailRequest mailRequest);
+        Task SendEmailMessageAsync(string userName,
+            string userEmail,
+            string newTicketStatus,
+            SessionTickets viewModel);
     }
 }

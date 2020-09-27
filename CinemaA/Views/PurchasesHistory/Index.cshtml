@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Ticket>
+﻿@model IEnumerable<Order>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,19 +12,19 @@
                 Buying Date
             </th>
             <th>
-                @Html.DisplayNameFor(ticket => ticket.Session.Film.Title)
+                @Html.DisplayNameFor(order => order.Ticket.Session.Film.Title)
             </th>
             <th>
                 Session Date
             </th>
             <th>
-                @Html.DisplayNameFor(ticket => ticket.Session.Time)
+                @Html.DisplayNameFor(order => order.Ticket.Session.Time)
             </th>
             <th>
-                @Html.DisplayNameFor(ticket => ticket.Session.Hall.Title)
+                @Html.DisplayNameFor(order => order.Ticket.Session.Hall.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(ticket => ticket.Session.Film.Format)
+                @Html.DisplayNameFor(order => order.Ticket.Session.Film.Format)
             </th>
             <th>
                 Seat
@@ -33,29 +33,29 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var ticket in Model)
+        @foreach (var order in Model)
         {
         <tr>
             <td>
-                @ticket.BuyingDateTime.ToString("dd.MM.yyyy HH:mm")
+                @order.BuyingDateTime.ToString("dd.MM.yyyy HH:mm")
             </td>
             <td>
-                @Html.DisplayFor(_ => ticket.Session.Film.Title)
+                @Html.DisplayFor(_ => order.Ticket.Session.Film.Title)
             </td>
             <td>
-                @Html.DisplayFor(_ => ticket.Session.Date)
+                @Html.DisplayFor(_ => order.Ticket.Session.Date)
             </td>
             <td>
-                @ticket.Session.Time.ToString(@"hh\:mm")
+                @order.Ticket.Session.Time.ToString(@"hh\:mm")
             </td>
             <td>
-                @Html.DisplayFor(_ => ticket.Session.Hall.Title)
+                @Html.DisplayFor(_ => order.Ticket.Session.Hall.Title)
             </td>
             <td>
-                @Html.DisplayFor(_ => ticket.Session.Film.Format)
+                @Html.DisplayFor(_ => order.Ticket.Session.Film.Format)
             </td>
             <td>
-                @Html.DisplayFor(_ => ticket.IdSeat)
+                @Html.DisplayFor(_ => order.Ticket.IdSeat)
             </td>
             @*
                 Place for returning ticket link.

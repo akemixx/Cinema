@@ -10,6 +10,12 @@
     <Compile Remove="Migrations\20200920165034_FilmShownOnScreenDefaultValue.Designer.cs" />
     <Compile Remove="Migrations\20200920165434_FilmShownOnScreenDefaultValue.cs" />
     <Compile Remove="Migrations\20200920165434_FilmShownOnScreenDefaultValue.Designer.cs" />
+    <Compile Remove="Migrations\20200927093842_Orders.cs" />
+    <Compile Remove="Migrations\20200927093842_Orders.Designer.cs" />
+    <Compile Remove="Migrations\20200927115916_Orders.cs" />
+    <Compile Remove="Migrations\20200927115916_Orders.Designer.cs" />
+    <Compile Remove="Migrations\20200927120057_Orders1.cs" />
+    <Compile Remove="Migrations\20200927120057_Orders1.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

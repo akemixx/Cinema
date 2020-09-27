@@ -14,7 +14,7 @@ namespace CinemaA.Data
         public DbSet<Hall> Halls { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
-
+        public DbSet<Order> Orders { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");

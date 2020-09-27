@@ -27,15 +27,18 @@ namespace CinemaA.Controllers
         }
         public IActionResult Index()
         {
-            string userEmail = _userManager.GetUserAsync(User).Result.Email;
-            return View(_context.Tickets
-                .Include(ticket => ticket.Session)
+            string userId = _userManager.GetUserAsync(User).Result.Id;
+            return View(_context.Orders
+                .Where(order => order.UserId == userId)
+                .Include(order => order.Ticket)
+                .ThenInclude(ticket => ticket.Session)
                 .ThenInclude(session => session.Film)
-                .Include(session => session.Session.Hall)
-                .Where(ticket => ticket.BuyerEmail == userEmail)
+                .Include(order => order.Ticket)
+                .ThenInclude(ticket => ticket.Session)
+                .ThenInclude(session => session.Hall)
                 .OrderBy(ticket => ticket.BuyingDateTime)
                 .ToList()
-                );
+                ); ;
         }
     }
 }

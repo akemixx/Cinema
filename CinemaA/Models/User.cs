@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace CinemaA.Models
 {
@@ -8,5 +9,7 @@ namespace CinemaA.Models
         public string RealName { get; set; }
         // Bonuses for authenticated users awarded for ticket purchases.
         public double Bonuses { get; set; }
+        // 
+        public List<Order> Orders { get; set; }
     }
 }
